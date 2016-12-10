@@ -1,0 +1,62 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Events Manager Pro Virement\n"
+"POT-Creation-Date: 2016-12-10 17:01+0100\n"
+"PO-Revision-Date: 2015-03-19 11:19+0100\n"
+"Last-Translator: Florent Maillefaud <contact@restezconnectes.fr>\n"
+"Language-Team: Florent Maillefaud <contact@restezconnectes.fr>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: add-ons/gateways/gateway.virement.php:167
+msgid "Redirecting Message"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:170
+msgid "Please wait, you will be redirected ..."
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:174
+msgid "The message that is shown to a user when a booking is successful whilst being redirected to Virement for payment."
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:178
+msgid "Status text"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:181
+msgid "Awaiting Virement Payment"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:185
+msgid "By default: <i>Awaiting Virement Payment</i>"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:188
+msgid "Select a color for the text. By default: <i>#333333</i>"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:190
+msgid "Select a color for the background text. By default: <i>none</i>"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:195
+msgid "Redirection Page"
+msgstr ""
+
+#: add-ons/gateways/gateway.virement.php:203
+msgid "Please select a page"
+msgstr ""
+
+#: events-manager-pro-virement.php:70
+msgid "Please ensure both Events Manager and Events Manager Pro are enabled for the Virement Gateway to work."
+msgstr ""
