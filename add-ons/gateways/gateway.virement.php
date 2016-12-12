@@ -19,8 +19,6 @@ class EM_Gateway_Virement extends EM_Gateway {
         $this->status_txt = '<span style="color:'.$txtColor.';background-color:'.$txtBgColor.'">'.get_option('em_'. $this->gateway . "_payment_txt_status" ).'</span>';
 
         add_action('em_gateway_js', array(&$this,'em_gateway_js'));
-        //add_action('em_template_my_bookings_header',array(&$this,'say_thanks')); //say thanks on my_bookings page
-        add_filter('em_booking_validate', array(&$this, 'em_booking_validate'),10,2); // Hook into booking validation
 	}
 
 	/*
@@ -42,30 +40,6 @@ class EM_Gateway_Virement extends EM_Gateway {
 	 * Booking Interception - functions that modify booking object behaviour
 	 * --------------------------------------------------
 	 */
-
-
-	/**
-	 * Intercepts return data after a booking has been made
-	 * Add payment method choices if setting is enabled via gateway settings
-	 * @param array $return
-	 * @param EM_Booking $EM_Booking
-	 * @return array
-	 */
-
-	/**
-	 * Hook into booking validation and check validate payment type if present
-	 * @param boolean $result
-	 * @param EM_Booking $EM_Booking
-	 */
-	function em_booking_validate($result, $EM_Booking) {
-        
-		if( isset( $_POST['paymentType'] ) && empty( $_POST['paymentType'] ) ) {
-			$EM_Booking->add_error('Please specify payment choose');
-			$result = false;
-		}
-        
-		return $result;
-	}
 
 	/**
 	 * Intercepts return data after a booking has been made and adds Virement vars, modifies feedback message.
