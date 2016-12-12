@@ -16,4 +16,7 @@ Add a new Gateway Virement to your Events Manager Pro plugin
 ![gateways view](https://restezconnectes.fr/plugins/images/screenshot1.jpg)
 
 ![settings](https://restezconnectes.fr/plugins/images/screenshot2.jpg)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1509692bc2fffb524a56437b24a0b63ef8e2bfa3
