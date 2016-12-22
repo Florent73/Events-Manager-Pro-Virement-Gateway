@@ -20,7 +20,7 @@ class EM_Gateway_Virement extends EM_Gateway {
 
         add_action('em_gateway_js', array(&$this,'em_gateway_js'));
         //add_action('em_template_my_bookings_header',array(&$this,'say_thanks')); //say thanks on my_bookings page
-        add_filter('em_booking_validate', array(&$this, 'em_booking_validate'),10,2); // Hook into booking validation
+        //add_filter('em_booking_validate', array(&$this, 'em_booking_validate'),10,2); // Hook into booking validation
 	}
 
 	/*
@@ -33,7 +33,9 @@ class EM_Gateway_Virement extends EM_Gateway {
 	 * Outputs some JavaScript during the em_gateway_js action, which is run inside a script html tag, located in gateways/gateway.virement.js
 	 */
 	function em_gateway_js(){
-		include(dirname(__FILE__).'/gateway.virement.js');
+
+        include(dirname(__FILE__).'/gateway.virement.js');
+ 
 	}
 
 
@@ -43,32 +45,7 @@ class EM_Gateway_Virement extends EM_Gateway {
 	 * --------------------------------------------------
 	 */
 
-
-	/**
-	 * Intercepts return data after a booking has been made
-	 * Add payment method choices if setting is enabled via gateway settings
-	 * @param array $return
-	 * @param EM_Booking $EM_Booking
-	 * @return array
-	 */
-
-	/**
-	 * Hook into booking validation and check validate payment type if present
-	 * @param boolean $result
-	 * @param EM_Booking $EM_Booking
-	 */
-	function em_booking_validate($result, $EM_Booking) {
-        
-		if( isset( $_POST['paymentType'] ) && empty( $_POST['paymentType'] ) ) {
-			$EM_Booking->add_error('Please specify payment choose');
-			$result = false;
-		}
-        
-		return $result;
-	}
-
-
-
+    
 	/**
 	 * Intercepts return data after a booking has been made and adds Virement vars, modifies feedback message.
 	 * @param array $return
@@ -79,37 +56,24 @@ class EM_Gateway_Virement extends EM_Gateway {
 
 		//Double check $EM_Booking is an EM_Booking object and that we have a booking awaiting payment.
 		if( is_object($EM_Booking) && $this->uses_gateway($EM_Booking) ){
-			if( !empty($return['result']) && get_option('em_'. $this->gateway . "_redirect" ) > 0 && $EM_Booking->get_price() > 0 && $EM_Booking->booking_status == $this->status ){
-                
-                if( $_REQUEST['paymentType'] == 2) {
-                    $this->status_txt = get_option('em_virement_payment_txt_status');
-                    $EM_Booking->set_status(0); //Set back to normal "pending"
-                }
+            
+			if( !empty($return['result']) && ( get_option('em_'. $this->gateway . "_redirect" ) != '' && get_option('em_'. $this->gateway . "_redirect" ) > 0) && $EM_Booking->get_price() > 0 && $EM_Booking->booking_status == $this->status ){
                 
 				$return['message'] = get_option('em_virement_booking_feedback');
 				$virement_url = $this->get_virement_url();
 				$virement_vars = $this->get_virement_vars($EM_Booking);
 				$virement_return = array('virement_url'=>$virement_url, 'virement_vars'=>$virement_vars);
 				$return = array_merge($return, $virement_return);
+                
 			}else{
+                
 				//returning a free message
 				$return['message'] = get_option('em_virement_booking_feedback');
+                
 			}
-		}
-        //print_r($_REQUEST);
-        
+		}    
 		return $return;
 	}
-    /*
-<select name="booking_status">
-<option value="0">En attente</option>
-<option value="1">Approuvée(s)</option>
-<option value="2">Rejetée</option>
-<option value="3">Annulé</option>
-<option value="4">En attente du paiement en ligne</option>
-<option value="5" selected="selected">Paiement En Attente</option>
-</select>
-*/
 
 	/*
 	 * ------------------------------------------------------------
@@ -139,11 +103,7 @@ class EM_Gateway_Virement extends EM_Gateway {
             'invoice' => 'EM-BOOKING#'. $EM_Booking->booking_id, //added to enable searching in event of failed IPNs
 			'desc' => $EM_Booking->get_event()->event_name
 		);
-        
-		if( get_option('em_'. $this->gateway . "_invoice_option" ) ) {
-			$virement_vars['paymentType'] = $_REQUEST['paymentType'];
-		}
-        
+            
 		return apply_filters('em_gateway_virement_get_virement_vars', $virement_vars, $EM_Booking, $this);
 	}
 
@@ -153,6 +113,7 @@ class EM_Gateway_Virement extends EM_Gateway {
 	 */
 	function get_virement_url(){
 
+        //error_log('redirect:'.get_option('em_'. $this->gateway . "_redirect" )); //not blank, all sorts of stuff
         if( get_option('em_'. $this->gateway . "_redirect" ) ) {
             $url = get_permalink( get_option('em_'.$this->gateway.'_redirect') );
             return $url;
@@ -167,25 +128,7 @@ class EM_Gateway_Virement extends EM_Gateway {
 	 */
 	function booking_form(){
 		echo get_option('em_'.$this->gateway.'_form');
-        if( get_option('em_'. $this->gateway . "_invoice_option" ) ) {
-			ob_start();
-			?>
-			<p>
-                <input type="checkbox" value="2" name="paymentType" /> <?php echo __('Need invoice before virement?', 'events-manager-pro-virement'); ?>
-			</p>
-			<?php
-			echo apply_filters('em_gateway_'.$this->gateway.'_booking_form', ob_get_clean() );
-		}
 	}
-    
-	/**
-	 * Return thanks message on My Bookings page if GET var set
-	 */
-	/*function say_thanks(){
-		if( $_REQUEST['thanks'] == 1 ){
-			echo "<div class='em-booking-message em-booking-message-success'>".get_option('em_'.$this->gateway.'_booking_feedback_thanks').'</div>';
-		}
-	}*/
 
 	/*
 	 * --------------------------------------------------
@@ -198,7 +141,7 @@ class EM_Gateway_Virement extends EM_Gateway {
         
         $textFeedback = get_option('em_'. $this->gateway . "_booking_feedback" );
         $textStatus = get_option('em_'. $this->gateway . "_payment_txt_status" );
-        //print_r($EM_Booking->status_array);
+
 		?>
 	<table class="form-table">
 		<tbody>
@@ -244,13 +187,6 @@ class EM_Gateway_Virement extends EM_Gateway {
                     ?>
 				</td>
             </tr>
-            <tr valign="top">
-				<th scope="row"><?php _e('Add Payment on invoice option?', 'events-manager-pro-virement') ?></th>
-				<td>
-					<input type="checkbox" name="virement_invoice_option" value="1" <?php echo (get_option('em_'. $this->gateway . "_invoice_option" )) ? 'checked="checked"':''; ?> />
-					<em><?php _e("Enable this option to offer the user a choice of payment on invoice", 'events-manager-pro-virement'); ?></em><br />
-				</td>
-			</tr>
 
 		</tbody>
 	</table>
@@ -262,7 +198,7 @@ class EM_Gateway_Virement extends EM_Gateway {
         
          $gateway_options = array(
             $this->gateway . '_booking_feedback' => wp_kses_data($_REQUEST[ $this->gateway.'_booking_feedback' ]),
-            $this->gateway . "_invoice_option" => $_REQUEST[ $this->gateway.'_invoice_option' ],
+            //$this->gateway . "_invoice_option" => $_REQUEST[ $this->gateway.'_invoice_option' ],
             $this->gateway . "_payment_txt_status" => wp_kses_data($_REQUEST[ $this->gateway.'_payment_txt_status' ]),
             $this->gateway . "_payment_txt_color" => wp_kses_data($_REQUEST[ $this->gateway.'_payment_txt_color' ]),
             $this->gateway . "_payment_txt_bgcolor" => wp_kses_data($_REQUEST[ $this->gateway.'_payment_txt_bgcolor' ]),
