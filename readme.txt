@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/RestezConnectes/10
 Tags: WordPress.com, events manager pro, gateway, virement
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,10 +32,13 @@ Yes. Thank you for submitting your changes to update the plugin.
 
 == Upgrade Notice ==
 
-= 0.1 =
+= 0.2 =
 This version is stable
 
 == Changelog ==
+
+= 0.2 =
+* Fixed bug class for php7
 
 = 0.1 =
 * First version

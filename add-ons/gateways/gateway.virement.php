@@ -165,11 +165,12 @@ class EM_Gateway_Virement extends EM_Gateway {
             echo esc_attr_e(get_option('em_'. $this->gateway . "_payment_txt_status" ));
         } ?>" style='width: 40em;' /><br />
 					<em><?php _e('By default: <i>Awaiting Virement Payment</i>', 'events-manager-pro-virement'); ?></em>
-                    <br />
+                    <br /><em><?php _e('Select a color for the text. By default: <i>#333333</i>', 'events-manager-pro-virement'); ?></em><br />
                     <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_color" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_color" ); } else { echo '#333333'; } ?>" name="virement_payment_txt_color" class="wpempvir-color-field" data-default-color="#000000" /><br />
-					<em><?php _e('Select a color for the text. By default: <i>#333333</i>', 'events-manager-pro-virement'); ?></em><br />
-                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ); } ?>" name="virement_payment_txt_bgcolor" class="wpempvir-color-field" /><br />
-					<em><?php _e('Select a color for the background text. By default: <i>none</i>', 'events-manager-pro-virement'); ?></em><br />
+					<br /><br />
+                    <em><?php _e('Select a color for the background text. By default: <i>none</i>', 'events-manager-pro-virement'); ?></em><br />
+                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ); } ?>" name="virement_payment_txt_bgcolor" class="wpempvir-color-field" />
+					<br />
 				</td>
 			</tr>
             

@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Events Manager Pro - Virement Gateway
-Plugin URI: http://wp-events-plugin.com
+Plugin URI: https://github.com/Florent73/events-manager-pro-virement
 Description: Virement gateway plugin for Events Manager Pro
-Version: 0.1
+Version: 0.2
 Depends: Events Manager Pro
 Author: Florent Maillefaud
 Author URI: https://restezconnectes.fr
@@ -34,7 +34,7 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 class EM_Pro_Virement {
 
-	function EM_Pro_Virement() {
+	function __construct() {
 		global $wpdb;
 		//Set when to run the plugin : after EM is loaded.
 		add_action( 'plugins_loaded', array(&$this,'init'), 100 );
