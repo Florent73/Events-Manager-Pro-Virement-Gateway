@@ -42,6 +42,7 @@ This version is stable
 
 = 0.2.1 =
 * Change name to Bank Transfer
+* Add version option
 
 = 0.2 =
 * Fixed bug class for php7
