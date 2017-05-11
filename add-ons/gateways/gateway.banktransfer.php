@@ -1,17 +1,28 @@
 <?php
 
-class EM_Gateway_Virement extends EM_Gateway {
+class EM_Gateway_Banktransfer extends EM_Gateway {
 
-	var $gateway = 'virement';
-	var $title = 'Virement';
+	var $gateway = 'banktransfer';
+	//var $title = 'Bank Transfer';
 	var $status = 5;
-    var $status_txt = 'Awaiting Virement Payment';
+    var $status_txt = 'Awaiting banktransfer Payment';
 	var $button_enabled = true;
 	var $payment_return = true;
 	var $supports_multiple_bookings = true;
 
 	public function __construct() {
+        
+        /* Version du plugin */
+        $option['em_'. $this->gateway .'_version'] = EMPRO_BT_VERSION;
+        if( !get_option('em_'. $this->gateway .'_version') ) {
+            add_option('em_'. $this->gateway .'_version', $option);
+        } else if ( get_option('em_'. $this->gateway .'_version') != EMPRO_BT_VERSION ) {
+            update_option('em_'. $this->gateway .'_version', EMPRO_BT_VERSION);
+        }
+        
 		parent::__construct();
+        
+        $this->title = __('Bank Transfer', 'events-manager-pro-banktransfer');
         
         if( get_option('em_'. $this->gateway . "_payment_txt_color" ) ) { $txtColor = get_option('em_'. $this->gateway . "_payment_txt_color" ); } else { $txtColor = '#333333'; }
         if( get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ) ) { $txtBgColor = get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ); } else { $txtBgColor = 'none'; }
@@ -25,16 +36,16 @@ class EM_Gateway_Virement extends EM_Gateway {
 
 	/*
 	 * --------------------------------------------------
-	 * Booking UI - modifications to booking pages and tables containing Virement bookings
+	 * Booking UI - modifications to booking pages and tables containing banktransfer bookings
 	 * --------------------------------------------------
 	 */
 
 	/**
-	 * Outputs some JavaScript during the em_gateway_js action, which is run inside a script html tag, located in gateways/gateway.virement.js
+	 * Outputs some JavaScript during the em_gateway_js action, which is run inside a script html tag, located in gateways/gateway.banktransfer.js
 	 */
 	function em_gateway_js(){
 
-        include(dirname(__FILE__).'/gateway.virement.js');
+        include(dirname(__FILE__).'/gateway.banktransfer.js');
  
 	}
 
@@ -47,7 +58,7 @@ class EM_Gateway_Virement extends EM_Gateway {
 
     
 	/**
-	 * Intercepts return data after a booking has been made and adds Virement vars, modifies feedback message.
+	 * Intercepts return data after a booking has been made and adds banktransfer vars, modifies feedback message.
 	 * @param array $return
 	 * @param EM_Booking $EM_Booking
 	 * @return array
@@ -59,16 +70,16 @@ class EM_Gateway_Virement extends EM_Gateway {
             
 			if( !empty($return['result']) && ( get_option('em_'. $this->gateway . "_redirect" ) != '' && get_option('em_'. $this->gateway . "_redirect" ) > 0) && $EM_Booking->get_price() > 0 && $EM_Booking->booking_status == $this->status ){
                 
-				$return['message'] = get_option('em_virement_booking_feedback');
-				$virement_url = $this->get_virement_url();
-				$virement_vars = $this->get_virement_vars($EM_Booking);
-				$virement_return = array('virement_url'=>$virement_url, 'virement_vars'=>$virement_vars);
-				$return = array_merge($return, $virement_return);
+				$return['message'] = get_option('em_banktransfer_booking_feedback');
+				$banktransfer_url = $this->get_banktransfer_url();
+				$banktransfer_vars = $this->get_banktransfer_vars($EM_Booking);
+				$banktransfer_return = array('banktransfer_url'=>$banktransfer_url, 'banktransfer_vars'=>$banktransfer_vars);
+				$return = array_merge($return, $banktransfer_return);
                 
 			}else{
                 
 				//returning a free message
-				$return['message'] = get_option('em_virement_booking_feedback');
+				$return['message'] = get_option('em_banktransfer_booking_feedback');
                 
 			}
 		}    
@@ -77,25 +88,25 @@ class EM_Gateway_Virement extends EM_Gateway {
 
 	/*
 	 * ------------------------------------------------------------
-	 * Virement Functions - functions specific to Virement payments
+	 * banktransfer Functions - functions specific to banktransfer payments
 	 * ------------------------------------------------------------
 	 */
 
 	/**
-	 * Retreive the Virement vars needed to send to the gatway to proceed with payment
+	 * Retreive the banktransfer vars needed to send to the gatway to proceed with payment
 	 * @param EM_Booking $EM_Booking
 	 */
-	function get_virement_vars( $EM_Booking ) {
+	function get_banktransfer_vars( $EM_Booking ) {
 		global $wp_rewrite, $EM_Notices;
 
 		$currency = get_option('dbem_bookings_currency', 'USD');
-		$currency = apply_filters('em_gateway_virement_get_currency', $currency, $EM_Booking );
+		$currency = apply_filters('em_gateway_banktransfer_get_currency', $currency, $EM_Booking );
 
 		$amount = $EM_Booking->get_price();
-		$amount = apply_filters('em_gateway_virement_get_amount', $amount, $EM_Booking, $_REQUEST );
+		$amount = apply_filters('em_gateway_banktransfer_get_amount', $amount, $EM_Booking, $_REQUEST );
         
 
-		$virement_vars = array(
+		$banktransfer_vars = array(
 			//'instId' => get_option('em_'. $this->gateway . "_instId" ),
 			'cartId' => $EM_Booking->booking_id,
 			'currency' => $currency,
@@ -104,14 +115,14 @@ class EM_Gateway_Virement extends EM_Gateway {
 			'desc' => $EM_Booking->get_event()->event_name
 		);
             
-		return apply_filters('em_gateway_virement_get_virement_vars', $virement_vars, $EM_Booking, $this);
+		return apply_filters('em_gateway_banktransfer_get_banktransfer_vars', $banktransfer_vars, $EM_Booking, $this);
 	}
 
 	/**
-	 * gets virement gateway url
+	 * gets banktransfer gateway url
 	 * @returns string
 	 */
-	function get_virement_url(){
+	function get_banktransfer_url(){
 
         //error_log('redirect:'.get_option('em_'. $this->gateway . "_redirect" )); //not blank, all sorts of stuff
         if( get_option('em_'. $this->gateway . "_redirect" ) ) {
@@ -146,36 +157,41 @@ class EM_Gateway_Virement extends EM_Gateway {
 	<table class="form-table">
 		<tbody>
 			<tr valign="top">
-				<th scope="row"><?php _e('Redirecting Message','events-manager-pro-virement') ?></th>
+				<th scope="row"><?php _e('Redirecting Message','events-manager-pro-banktransfer') ?></th>
 				<td>
-					<input type="text" name="virement_booking_feedback" value="<?php if( empty($textFeedback) ) { 
-            echo esc_attr_e(__('Please wait, you will be redirected ...', 'events-manager-pro-virement')); 
+					<input type="text" name="banktransfer_booking_feedback" value="<?php if( empty($textFeedback) ) { 
+            echo esc_attr_e(__('Please wait, you will be redirected ...', 'events-manager-pro-banktransfer')); 
         } else {
             echo esc_attr_e(get_option('em_'. $this->gateway . "_booking_feedback" ));
         } ?>" style='width: 40em;' /><br />
-					<em><?php _e('The message that is shown to a user when a booking is successful whilst being redirected to Virement for payment.','events-manager-pro-virement'); ?></em>
+					<em><?php _e('The message that is shown to a user when a booking is successful whilst being redirected to Bank Transfer for payment.','events-manager-pro-banktransfer'); ?></em>
 				</td>
 			</tr>
             <tr valign="top">
-				<th scope="row"><?php _e('Status text','events-manager-pro-virement') ?></th>
+				<th scope="row"><?php _e('Status text', 'events-manager-pro-banktransfer') ?></th>
 				<td>
-					<input type="text" name="virement_payment_txt_status" value="<?php if( empty($textStatus) ) { 
-            echo esc_attr_e(__('Awaiting Virement Payment', 'events-manager-pro-virement')); 
+					<input type="text" name="banktransfer_payment_txt_status" value="<?php if( empty($textStatus) ) { 
+            echo esc_attr_e(__('Awaiting Bank Transfer Payment', 'events-manager-pro-banktransfer')); 
         } else {
             echo esc_attr_e(get_option('em_'. $this->gateway . "_payment_txt_status" ));
         } ?>" style='width: 40em;' /><br />
-					<em><?php _e('By default: <i>Awaiting Virement Payment</i>', 'events-manager-pro-virement'); ?></em>
-                    <br /><em><?php _e('Select a color for the text. By default: <i>#333333</i>', 'events-manager-pro-virement'); ?></em><br />
-                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_color" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_color" ); } else { echo '#333333'; } ?>" name="virement_payment_txt_color" class="wpempvir-color-field" data-default-color="#000000" /><br />
-					<br /><br />
-                    <em><?php _e('Select a color for the background text. By default: <i>none</i>', 'events-manager-pro-virement'); ?></em><br />
-                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ); } ?>" name="virement_payment_txt_bgcolor" class="wpempvir-color-field" />
+					<em><?php _e('By default: <i>Awaiting Bank Transfer Payment</i>', 'events-manager-pro-banktransfer'); ?></em>
+                </td>
+			</tr>
+            <tr>
+                <th scope="row"><?php _e('Colors:', 'events-manager-pro-banktransfer') ?></th>
+                <td>
+                    <em><?php _e('Select a color for the text. By default: <i>#333333</i>', 'events-manager-pro-banktransfer'); ?></em><br />
+                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_color" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_color" ); } else { echo '#333333'; } ?>" name="banktransfer_payment_txt_color" class="wpempvir-color-field" data-default-color="#000000" /><br />
+					<br />
+                    <em><?php _e('Select a color for the background text. By default: <i>none</i>', 'events-manager-pro-banktransfer'); ?></em><br />
+                    <input type="text" value="<?php if( get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ) ) { echo get_option('em_'. $this->gateway . "_payment_txt_bgcolor" ); } ?>" name="banktransfer_payment_txt_bgcolor" class="wpempvir-color-field" />
 					<br />
 				</td>
 			</tr>
             
             <tr valign="top">
-				<th scope="row"><?php _e('Redirection Page','events-manager-pro-virement') ?></th>
+				<th scope="row"><?php _e('Redirection Page', 'events-manager-pro-banktransfer') ?></th>
 				<td>
                     <?php
                         if( get_option('em_'. $this->gateway . "_redirect" ) ) { 
@@ -183,7 +199,7 @@ class EM_Gateway_Virement extends EM_Gateway {
                         } else {
                             $idSelectPage = 0;
                         }
-                        $args = array('name' => 'virement_redirect', 'selected' => $idSelectPage, 'show_option_none' => __('Please select a page','events-manager-pro-virement') ); 
+                        $args = array('name' => 'banktransfer_redirect', 'selected' => $idSelectPage, 'show_option_none' => __('Please select a page','events-manager-pro-banktransfer') ); 
                         wp_dropdown_pages($args);
                     ?>
 				</td>
@@ -218,4 +234,4 @@ class EM_Gateway_Virement extends EM_Gateway {
 	}
 }
 
-EM_Gateways::register_gateway('virement', 'EM_Gateway_Virement');
+EM_Gateways::register_gateway('banktransfer', 'EM_Gateway_Banktransfer');

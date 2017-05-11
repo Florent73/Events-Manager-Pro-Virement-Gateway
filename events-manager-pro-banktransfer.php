@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: Events Manager Pro - Virement Gateway
-Plugin URI: https://github.com/Florent73/events-manager-pro-virement
+Plugin Name: Events Manager Pro - Bank Transfer gateway
+Plugin URI: https://github.com/Florent73/events-manager-pro-banktransfer
 Description: Virement gateway plugin for Events Manager Pro
-Version: 0.2
+Version: 0.2.1
 Depends: Events Manager Pro
 Author: Florent Maillefaud
 Author URI: https://restezconnectes.fr
 Domain Path: /languages
-Text Domain: events-manager-pro-virement
+Text Domain: events-manager-pro-banktransfer
 */
 
 /*  Copyright 2007-2015 Florent Maillefaud (email: contact at restezconnectes.fr)
@@ -31,8 +31,9 @@ Text Domain: events-manager-pro-virement
 
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
+if( !defined( 'EMPRO_BT_VERSION' )) { define( 'EMPRO_BT_VERSION', '0.2.1' ); }
 
-class EM_Pro_Virement {
+class EM_Pro_Banktransfer {
 
 	function __construct() {
 		global $wpdb;
@@ -44,7 +45,7 @@ class EM_Pro_Virement {
 		//add-ons
 		if( is_plugin_active('events-manager/events-manager.php') && is_plugin_active('events-manager-pro/events-manager-pro.php') ) {
 			//add-ons
-			include('add-ons/gateways/gateway.virement.php');
+			include('add-ons/gateways/gateway.banktransfer.php');
 		}else{
 			add_action( 'admin_notices', array(&$this,'not_activated_error_notice') );
 		}
@@ -57,21 +58,21 @@ class EM_Pro_Virement {
     function empvir_add_admin() {
        
         wp_enqueue_style( 'wp-color-picker' );
-        wp_enqueue_script( 'my-script-handle', plugin_dir_url( __FILE__ ).'js/gateway-virement-color-options.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'my-script-handle', plugin_dir_url( __FILE__ ).'js/gateway-banktransfer-color-options.js', array( 'wp-color-picker' ), false, true );
     }
     
     function _empv_load_translation() {
-        load_plugin_textdomain( 'events-manager-pro-virement', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+        load_plugin_textdomain( 'events-manager-pro-banktransfer', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
     
     
 	function not_activated_error_notice() {
 		$class = "error";
-		$message = __('Please ensure both Events Manager and Events Manager Pro are enabled for the Virement Gateway to work.', 'em-pro');
+		$message = __('Please ensure both Events Manager and Events Manager Pro be enabled for the Bank Transfer gateway to work.', 'em-pro');
 		echo '<div class="'.$class.'"> <p>'.$message.'</p></div>';
 	}
 }
 
 // Start plugin
-global $EM_Pro_Virement;
-$EM_Pro_Virement = new EM_Pro_Virement();
+global $EM_Pro_Banktransfer;
+$EM_Pro_Banktransfer = new EM_Pro_Banktransfer();

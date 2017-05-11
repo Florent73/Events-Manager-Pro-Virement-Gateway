@@ -1,5 +1,5 @@
 # Events-Manager-Pro-Virement-Gateway
-Add a new Gateway Virement to your Events Manager Pro plugin
+Add a new Bank Transfert gateway for your Events Manager Pro plugin
 
 ## Installation
 1. Upload the full directory into your '/wp-content/plugins' directory

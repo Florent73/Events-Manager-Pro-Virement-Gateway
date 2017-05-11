@@ -1,19 +1,22 @@
 === Plugin Name ===
 Contributors: Florent73
-Donate link: https://www.paypal.me/RestezConnectes/10
-Tags: WordPress.com, events manager pro, gateway, virement
+Donate link: https://www.paypal.me/RestezConnectes/
+Tags: events manager pro, gateway, bank transfert, transfert, virement bancaire
 Requires at least: 3.0
 Tested up to: 4.7
-Stable tag: 0.2
+Stable tag: 0.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Gateway Virement for Events Manager Pro
+Bank Transfer gateway for Events Manager Pro
 
 == Description ==
-Add a new Gateway Virement to your Events Manager Pro plugin.
 
-events-manager-pro-virement.pot file available
+This plugin adds conditional logic to premium version of <a href="https://wordpress.org/plugins/events-manager/">[Events Manager]</a>. See features and pricing <a href="http://wp-events-plugin.com/">here</a>.
+
+Add a new gateway "Bank Transfer" for your Events Manager Pro plugin.
+
+events-manager-pro-banktransfer.pot file available
 
 == Installation ==
 1. Upload the full directory into your '/wp-content/plugins' directory
@@ -24,7 +27,7 @@ events-manager-pro-virement.pot file available
 
 = This plugin is free ? =
 
-Yes. If you want, you can support this project here : https://restezconnectes.fr/a-propos/
+Yes. If you want, you can support this project here: <a href="https://restezconnectes.fr/a-propos/">https://restezconnectes.fr/a-propos/</a>
 
 = Can I change the plugin code? =
 
@@ -32,10 +35,13 @@ Yes. Thank you for submitting your changes to update the plugin.
 
 == Upgrade Notice ==
 
-= 0.2 =
+= 0.2.1 =
 This version is stable
 
 == Changelog ==
+
+= 0.2.1 =
+* Change name to Bank Transfer
 
 = 0.2 =
 * Fixed bug class for php7
