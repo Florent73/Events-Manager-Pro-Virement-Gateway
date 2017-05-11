@@ -1,4 +1,4 @@
-# Events-Manager-Pro-Virement-Gateway
+# Events Manager Pro - Bank Transfer gateway
 Add a new Bank Transfert gateway for your Events Manager Pro plugin
 
 ## Installation
@@ -16,3 +16,5 @@ Add a new Bank Transfert gateway for your Events Manager Pro plugin
 ![gateways view](https://restezconnectes.fr/plugins/images/screenshot1.jpg)
 
 ![settings](https://restezconnectes.fr/plugins/images/screenshot2.jpg)
+
+![reservation](https://restezconnectes.fr/plugins/images/screenshot3.jpg)

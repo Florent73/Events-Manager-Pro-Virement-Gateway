@@ -5,7 +5,7 @@ class EM_Gateway_Banktransfer extends EM_Gateway {
 	var $gateway = 'banktransfer';
 	//var $title = 'Bank Transfer';
 	var $status = 5;
-    var $status_txt = 'Awaiting banktransfer Payment';
+    var $status_txt = 'Awaiting Bank Transfer Payment';
 	var $button_enabled = true;
 	var $payment_return = true;
 	var $supports_multiple_bookings = true;
