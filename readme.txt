@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Bank Transfer gateway for Events Manager Pro ===
 Contributors: Florent73
 Donate link: https://www.paypal.me/RestezConnectes/
 Tags: events manager pro, gateway, bank transfert, transfert, virement bancaire
@@ -8,7 +8,7 @@ Stable tag: 0.2.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Bank Transfer gateway for Events Manager Pro
+Add a Bank Transfer gateway for Events Manager Pro
 
 == Description ==
 
